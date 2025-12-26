@@ -1,0 +1,156 @@
+# NEW TERMINAL SETUP run: . /basic-term-setup.sh
+if [ -f ~/.zshrc ]; then
+    export SHELL_RC_FILE="$HOME/.zshrc"
+elif [ -f ~/.bashrc ]; then
+    export SHELL_RC_FILE="$HOME/.bashrc"
+fi
+
+# on mac install brew
+if [ "$(uname)" = "Darwin" ]; then
+  # install homebrew IF NOT INSTALLED
+  which brew >/dev/null 2>&1 || /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+fi
+
+# install zoxide IF NOT INSTALLED
+printf "Checking zoxide installation..."
+if ! command -v zoxide >/dev/null 2>&1; then
+  curl -sSfL https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | sh
+  ## add zoxide init to shell config files
+  # if ~/.local/bin is not in PATH, add it
+  if [[ ":$PATH:" != *":$HOME/.local/bin:"* ]]; then
+      echo 'export PATH="$HOME/.local/bin:$PATH"' >> $SHELL_RC_FILE
+      export PATH="$HOME/.local/bin:$PATH"
+    else
+      echo "PATH already contains ~/.local/bin"
+  fi
+  echo 'eval "$(zoxide init '$(basename $SHELL)')"' >> $SHELL_RC_FILE
+  ## run zoxide init for current shell
+  eval "$(zoxide init $(basename $SHELL))"
+else 
+  # print checkmark
+  printf "\033[0;32m✔\033[0m\n"
+fi  
+
+printf "Checking fzf installation..."
+# install fzf IF NOT INSTALLED
+if ! command -v fzf >/dev/null 2>&1; then
+  if [ "$(uname)" = "Darwin" ]; then
+    ## on mac with homebrew
+      brew install fzf
+      $(brew --prefix)/opt/fzf/install
+  elif [ -f /etc/debian_version ]; then
+    ## using apt
+      apt install -y fzf
+  else 
+    # print in red letters
+    printf "\033[0;31mCould not install fzf. Please install it manually.\033[0m\n"
+  fi
+  else 
+    printf "\033[0;32m✔\033[0m\n"
+fi
+
+printf "Checking vim installation..."
+# install vim IF NOT INSTALLED
+if ! command -v vim >/dev/null 2>&1; then
+  if [ "$(uname)" = "Darwin" ]; then
+    ## on mac with homebrew
+      brew install vim
+  elif [ -f /etc/debian_version ]; then
+    ## using apt
+      apt install -y vim
+  else 
+    # print in red letters
+    printf "\033[0;31mCould not install vim. Please install it manually.\033[0m\n"
+  fi
+  else 
+    printf "\033[0;32m✔\033[0m\n"
+fi
+
+# install wget
+printf "Checking wget installation..."
+if ! command -v wget >/dev/null 2>&1; then
+  if [ "$(uname)" = "Darwin" ]; then
+    ## on mac with homebrew
+      brew install wget
+  elif [ -f /etc/debian_version ]; then
+    ## using apt
+      apt install -y wget
+  else 
+    # print in red letters
+    printf "\033[0;31mCould not install wget. Please install it manually.\033[0m\n"
+  fi
+  else 
+    printf "\033[0;32m✔\033[0m\n"
+fi
+
+# install fastfetch if NOT INSTALLED
+printf "Checking fastfetch installation..."
+if ! command -v fastfetch >/dev/null 2>&1; then
+  if [ "$(uname)" = "Darwin" ]; then
+    ## on mac with homebrew
+      brew install fastfetch
+  elif [ -f /etc/debian_version ]; then
+    # Detect architecture
+    ARCH=$(dpkg --print-architecture)
+    
+    # Get the latest release URL
+    LATEST_URL=$(wget -qO- https://api.github.com/repos/fastfetch-cli/fastfetch/releases/latest | grep "browser_download_url.*linux-$ARCH.deb" | cut -d '"' -f 4)
+    
+    if [ -z "$LATEST_URL" ]; then
+        printf "\n\t\033[0;31mError: Could not find a release for architecture: $ARCH\033[0m\n"
+        exit 1
+    fi
+    
+    # Download and install
+    printf "\n\tDownloading fastfetch..."
+    wget -O /tmp/fastfetch.deb "$LATEST_URL"
+    
+    printf "\n\tInstalling downloaded package..."
+    apt install -y /tmp/fastfetch.deb
+    
+    # Cleanup
+    rm -f /tmp/fastfetch.deb
+
+    # add fastfetch to shell config files
+    printf "if [[ \$- == *i* ]]; then \n  fastfetch \nfi\n" >> $SHELL_RC_FILE
+  else 
+    # print in red letters
+    printf "\n\033[0;31mCould not install fastfetch. Please install it manually.\033[0m\n"
+  fi
+  else 
+    printf "\033[0;32m✔\033[0m\n"
+fi
+
+# install iperf3 if NOT INSTALLED
+printf "Checking iperf3 installation..."
+if ! command -v iperf3 >/dev/null 2>&1; then
+  if [ "$(uname)" = "Darwin" ]; then
+    ## on mac with homebrew
+      brew install iperf3
+  elif [ -f /etc/debian_version ]; then
+    ## using apt
+      apt install -y iperf3
+  else 
+    # print in red letters
+    printf "\033[0;31mCould not install iperf3. Please install it manually.\033[0m\n"
+  fi
+  else 
+    printf "\033[0;32m✔\033[0m\n"
+fi
+
+# install rsync IF NOT INSTALLED
+printf "Checking rsync installation..."
+if ! command -v rsync >/dev/null 2>&1; then
+  if [ "$(uname)" = "Darwin" ]; then
+    ## on mac with homebrew
+      brew install rsync
+  elif [ -f /etc/debian_version ]; then
+    ## using apt
+      apt install -y rsync
+  else 
+    # print in red letters
+    printf "\033[0;31mCould not install rsync. Please install it manually.\033[0m\n"
+  fi
+  else 
+    printf "\033[0;32m✔\033[0m\n"
+fi
