@@ -13,7 +13,22 @@ try_sudo() {
     need_sudo
     "${SUDO}" "$@"
 }
+need_sudo() {
+    if ! check_cmd "${SUDO}"; then
+        err "\
+could not find the command \`${SUDO}\` needed to get permissions for install.
 
+If you are on Windows, please run your shell as an administrator, then rerun this script.
+Otherwise, please run this script as root, or install \`sudo\`."
+    fi
+
+    if ! "${SUDO}" -v; then
+        err "sudo permissions not granted, aborting installation"
+    fi
+}
+check_cmd() {
+    command -v -- "$1" >/dev/null 2>&1
+}
 # on mac install brew
 if [ "$(uname)" = "Darwin" ]; then
   # install homebrew IF NOT INSTALLED
@@ -22,7 +37,7 @@ fi
 
 # install zoxide IF NOT INSTALLED
 printf "Checking zoxide installation..."
-if ! command -v zoxide >/dev/null 2>&1; then
+if ! check_cmd zoxide; then
   curl -sSfL https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | sh
   ## add zoxide init to shell config files
   # if ~/.local/bin is not in PATH, add it
@@ -42,7 +57,7 @@ fi
 
 printf "Checking fzf installation..."
 # install fzf IF NOT INSTALLED
-if ! command -v fzf >/dev/null 2>&1; then
+if ! check_cmd fzf; then
   if [ "$(uname)" = "Darwin" ]; then
     ## on mac with homebrew
       brew install fzf
@@ -60,7 +75,7 @@ fi
 
 printf "Checking vim installation..."
 # install vim IF NOT INSTALLED
-if ! command -v vim >/dev/null 2>&1; then
+if ! check_cmd vim; then
   if [ "$(uname)" = "Darwin" ]; then
     ## on mac with homebrew
       brew install vim
@@ -77,7 +92,7 @@ fi
 
 # install wget
 printf "Checking wget installation..."
-if ! command -v wget >/dev/null 2>&1; then
+if ! check_cmd wget; then
   if [ "$(uname)" = "Darwin" ]; then
     ## on mac with homebrew
       brew install wget
@@ -94,7 +109,7 @@ fi
 
 # install fastfetch if NOT INSTALLED
 printf "Checking fastfetch installation..."
-if ! command -v fastfetch >/dev/null 2>&1; then
+if ! check_cmd fastfetch; then
   if [ "$(uname)" = "Darwin" ]; then
     ## on mac with homebrew
       brew install fastfetch
@@ -132,7 +147,7 @@ fi
 
 # install iperf3 if NOT INSTALLED
 printf "Checking iperf3 installation..."
-if ! command -v iperf3 >/dev/null 2>&1; then
+if ! check_cmd iperf3; then
   if [ "$(uname)" = "Darwin" ]; then
     ## on mac with homebrew
       brew install iperf3
@@ -149,7 +164,7 @@ fi
 
 # install rsync IF NOT INSTALLED
 printf "Checking rsync installation..."
-if ! command -v rsync >/dev/null 2>&1; then
+if ! check_cmd rsync; then
   if [ "$(uname)" = "Darwin" ]; then
     ## on mac with homebrew
       brew install rsync
