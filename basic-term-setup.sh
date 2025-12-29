@@ -180,3 +180,20 @@ if ! check_cmd rsync; then
   else 
     printf "\033[0;32m✔\033[0m\n"
 fi
+
+# install btop IF NOT INSTALLED
+printf "Checking btop installation..."
+if ! check_cmd btop; then
+  if [ "$(uname)" = "Darwin" ]; then
+    ## on mac with homebrew
+      brew install btop
+  elif [ -f /etc/debian_version ]; then
+    ## using apt
+      try_sudo apt install -y btop
+  else 
+    # print in red letters
+    printf "\033[0;31mCould not install btop. Please install it manually.\033[0m\n"
+  fi
+  else 
+    printf "\033[0;32m✔\033[0m\n"
+fi
