@@ -45,7 +45,6 @@ if ! check_cmd zoxide; then
   CURRENT_SHELL=$(basename "$SHELL")
   if ! check_cmd zoxide; then
       printf "export PATH=\"\$HOME/.local/bin:\$PATH\"\n" >> $SHELL_RC_FILE
-      echo $HOME
       export PATH="$HOME/.local/bin:$PATH"
       echo "added to path"
       echo $PATH
