@@ -48,9 +48,9 @@ if ! check_cmd zoxide; then
       echo "added to path"
       echo $PATH
   fi
-  printf 'eval "$(zoxide init '$(basename $SHELL)')"' >> $SHELL_RC_FILE
-  eval "$(zoxide init $(basename $SHELL))"
+  CURRENT_SHELL=$(basename "$SHELL")
+  printf 'eval "$(zoxide init %s)"\n' "$CURRENT_SHELL" >> "$SHELL_RC_FILE"
+  eval "$(zoxide init $CURRENT_SHELL)"
 else 
-  # print checkmark
   printf "\033[0;32m✔\033[0m\n"
 fi
