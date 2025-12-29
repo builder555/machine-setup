@@ -43,14 +43,14 @@ printf "Checking zoxide installation..."
 if ! check_cmd zoxide; then
   curl -sSfL https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | sh
   CURRENT_SHELL=$(basename "$SHELL")
-  eval "$(zoxide init $CURRENT_SHELL)"
   if ! check_cmd zoxide; then
-      printf 'export PATH="$HOME/.local/bin:$PATH"\n' >> $SHELL_RC_FILE
+      printf 'export PATH="$HOME/.local/bin:$PATH"' >> $SHELL_RC_FILE
       export PATH="$HOME/.local/bin:$PATH"
       echo "added to path"
       echo $PATH
   fi
-  printf 'eval "$(zoxide init %s)"\n' "$CURRENT_SHELL" >> "$SHELL_RC_FILE"
+  eval "$(zoxide init $CURRENT_SHELL)"
+  printf 'eval "$(zoxide init %s)"' "$CURRENT_SHELL" >> "$SHELL_RC_FILE"
 else 
   printf "\033[0;32m✔\033[0m\n"
 fi
