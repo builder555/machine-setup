@@ -1,10 +1,12 @@
 #!/usr/bin/bash
-set -e
+set -euo pipefail
 if [ -f ~/.zshrc ]; then
     export SHELL_RC_FILE="$HOME/.zshrc"
 elif [ -f ~/.bashrc ]; then
     export SHELL_RC_FILE="$HOME/.bashrc"
 fi
+
+SUDO="sudo"
 
 check_cmd() {
     command -v -- "$1" >/dev/null 2>&1
