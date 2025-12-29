@@ -42,12 +42,9 @@ fi
 printf "Checking zoxide installation..."
 if ! check_cmd zoxide; then
   curl -sSfL https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | sh
-  echo "Adding ~/.local/bin to $PATH... in $SHELL_RC_FILE"
-  if [[ ":$PATH:" != *":$HOME/.local/bin:"* ]]; then
+  if ! check_cmd zoxide; then
       echo 'export PATH="$HOME/.local/bin:$PATH"' >> $SHELL_RC_FILE
       export PATH="$HOME/.local/bin:$PATH"
-    else
-      echo "PATH already contains ~/.local/bin"
   fi
   echo 'eval "$(zoxide init '$(basename $SHELL)')"' >> $SHELL_RC_FILE
   eval "$(zoxide init $(basename $SHELL))"
