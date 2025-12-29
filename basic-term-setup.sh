@@ -1,4 +1,4 @@
-# NEW TERMINAL SETUP run: . /basic-term-setup.sh
+#!/bin/bash
 set -e
 if [ -f ~/.zshrc ]; then
     export SHELL_RC_FILE="$HOME/.zshrc"
