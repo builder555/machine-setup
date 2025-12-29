@@ -5,14 +5,10 @@ elif [ -f ~/.bashrc ]; then
     export SHELL_RC_FILE="$HOME/.bashrc"
 fi
 
-try_sudo() {
-    if "$@" >/dev/null 2>&1; then
-        return 0
-    fi
-
-    need_sudo
-    "${SUDO}" "$@"
+check_cmd() {
+    command -v -- "$1" >/dev/null 2>&1
 }
+
 need_sudo() {
     if ! check_cmd "${SUDO}"; then
         err "\
@@ -26,8 +22,14 @@ Otherwise, please run this script as root, or install \`sudo\`."
         err "sudo permissions not granted, aborting installation"
     fi
 }
-check_cmd() {
-    command -v -- "$1" >/dev/null 2>&1
+
+try_sudo() {
+    if "$@" >/dev/null 2>&1; then
+        return 0
+    fi
+
+    need_sudo
+    "${SUDO}" "$@"
 }
 # on mac install brew
 if [ "$(uname)" = "Darwin" ]; then
