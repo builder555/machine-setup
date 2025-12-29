@@ -5,6 +5,15 @@ elif [ -f ~/.bashrc ]; then
     export SHELL_RC_FILE="$HOME/.bashrc"
 fi
 
+try_sudo() {
+    if "$@" >/dev/null 2>&1; then
+        return 0
+    fi
+
+    need_sudo
+    "${SUDO}" "$@"
+}
+
 # on mac install brew
 if [ "$(uname)" = "Darwin" ]; then
   # install homebrew IF NOT INSTALLED
@@ -40,7 +49,7 @@ if ! command -v fzf >/dev/null 2>&1; then
       $(brew --prefix)/opt/fzf/install
   elif [ -f /etc/debian_version ]; then
     ## using apt
-      apt install -y fzf
+      try_sudo apt install -y fzf
   else 
     # print in red letters
     printf "\033[0;31mCould not install fzf. Please install it manually.\033[0m\n"
@@ -57,7 +66,7 @@ if ! command -v vim >/dev/null 2>&1; then
       brew install vim
   elif [ -f /etc/debian_version ]; then
     ## using apt
-      apt install -y vim
+      try_sudo apt install -y vim
   else 
     # print in red letters
     printf "\033[0;31mCould not install vim. Please install it manually.\033[0m\n"
@@ -74,7 +83,7 @@ if ! command -v wget >/dev/null 2>&1; then
       brew install wget
   elif [ -f /etc/debian_version ]; then
     ## using apt
-      apt install -y wget
+      try_sudo apt install -y wget
   else 
     # print in red letters
     printf "\033[0;31mCould not install wget. Please install it manually.\033[0m\n"
@@ -106,7 +115,7 @@ if ! command -v fastfetch >/dev/null 2>&1; then
     wget -O /tmp/fastfetch.deb "$LATEST_URL"
     
     printf "\n\tInstalling downloaded package..."
-    apt install -y /tmp/fastfetch.deb
+    try_sudo apt install -y /tmp/fastfetch.deb
     
     # Cleanup
     rm -f /tmp/fastfetch.deb
@@ -129,7 +138,7 @@ if ! command -v iperf3 >/dev/null 2>&1; then
       brew install iperf3
   elif [ -f /etc/debian_version ]; then
     ## using apt
-      apt install -y iperf3
+      try_sudo apt install -y iperf3
   else 
     # print in red letters
     printf "\033[0;31mCould not install iperf3. Please install it manually.\033[0m\n"
@@ -146,7 +155,7 @@ if ! command -v rsync >/dev/null 2>&1; then
       brew install rsync
   elif [ -f /etc/debian_version ]; then
     ## using apt
-      apt install -y rsync
+      try_sudo apt install -y rsync
   else 
     # print in red letters
     printf "\033[0;31mCould not install rsync. Please install it manually.\033[0m\n"
